@@ -9,11 +9,26 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/app.css">
     </head>
     <body>
-
+    <div class="centre inlineBlock">
         <canvas></canvas>
+    </div>
 
-        <script src="js/main.js"></script>
+    <div class="inlineBlock">
+        <select id="settings" selected="0">
+            <option value="0">first</option>
+            <option value="1">second</option>
+            <option value="2">third</option>
+        </select>
+        <div>
+            <button id="playButton">Play</button>
+        </div>
+    </div>
+
+
+    <!--load scripts-->
+    <script src="js/main.js"></script>
     </body>
 </html>
