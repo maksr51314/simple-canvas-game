@@ -23,17 +23,22 @@ var imagePaths = {
     "SYM7.png": {x: 0, y: Y_POSITION, index: 1}
 };
 
+//loading
 var loading = new Image();
 loading.src = IMAGE_PATH + 'BTN_Spin_d.png';
 loading.onload = function() {
     ctx.drawImage(this, can.width/2 - this.width/2, can.height/2 - this.height/2);
 };
 
+
+//audio
 function playAudio(){
     var audio = new Audio("audio/example.wav");
     audio.play();
 }
 
+
+//load all images
 function loadImages(paths, whenLoaded){
 
     paths.forEach(function(path){
@@ -56,6 +61,8 @@ function loadImages(paths, whenLoaded){
     });
 }
 
+
+//drow some image
 function drawImage (imgs, key, x, y) {
     var xPos = x || imagePaths[imgs[key].name].x;
     var yPos = y || imagePaths[imgs[key].name].y;
@@ -63,30 +70,54 @@ function drawImage (imgs, key, x, y) {
     ctx.drawImage(imgs[key], xPos, yPos);
 }
 
+//show default images
 function showImages(imgs) {
     drawImage(imgs, 'BG.png');
     drawImage(imgs, 'BTN_Spin.png');
 }
 
+//reset background
+function resetBg(callback, isBgNotExist) {
+    setTimeout(function() {
+        ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+
+        if (!isBgNotExist) {
+            showImages(imgs);
+        }
+
+        if (_.isFunction(callback)) {
+            callback();
+        }
+
+    }, 1000)
+}
+
+//default win
 function win() {
     drawImage(imgs, "SYM4.png", Rows[0], Y_POSITION);
     drawImage(imgs, "SYM4.png", Rows[1], Y_POSITION);
     drawImage(imgs, "SYM4.png", Rows[2], Y_POSITION);
 
-    setTimeout(function() {
-        ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
-        showImages(imgs);
-        drawImage(imgs, "SYM3.png", can.width/2, can.width/2);
+    resetBg(function() {
+        drawImage(imgs, "SYM1.png", Rows[1], Y_POSITION);
         playAudio();
-    }, 2000)
+
+        setTimeout(function() {
+            resetBg();
+        }, 2000);
+    }, true);
 }
 
+//default fail
 function fail() {
-    drawImage(imgs, "SYM1.png", Rows[1], Y_POSITION);
-    drawImage(imgs, "SYM3.png", Rows[2], Y_POSITION);
-    drawImage(imgs, "SYM4.png", Rows[2], Y_POSITION);
+    drawImage(imgs, "SYM3.png", Rows[0], Y_POSITION);
+    drawImage(imgs, "SYM4.png", Rows[1], Y_POSITION);
+    drawImage(imgs, "SYM5.png", Rows[2], Y_POSITION);
+
+    resetBg();
 }
 
+//add events on play button
 function addEvents() {
     var settings;
 
@@ -102,6 +133,7 @@ function addEvents() {
     })
 }
 
+//load images
 loadImages(Object.keys(imagePaths), function(imgs){
     console.log('Loaded');
     ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
